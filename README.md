@@ -6,7 +6,7 @@ The MD portion of the code starts with a uniform spatial distribution of ions at
 for the *<sup>2</sup>S<sub>1/2</sub> &rightarrow; <sup>2</sup>P<sub>3/2</sub>* transition and a re-pump laser
 for the *<sup>2</sup>D<sub>5/2</sub> &rightarrow; <sup>2</sup>P<sub>3/2</sub>* transition.
 
-The conventions, units and assumptions of the code are explained in reference [[1]](#references). For simplicity, the MDQT code consist of a single C++ source file [PlasmaMDQTSimulation.cpp](/PlasmaMDQTSimulation.cpp). Prior to running a simulation, the user must appropriately set the input parameters, which are contained in a clearly-labeled section in the first 100 lines of the MDQT code, and then compile it into an executable. The code uses openMP to run on multicore computers, and, for simulations of large systems, requires significant computational resources. For best performance we suggest running several instances at the same time on a supercomputer.
+The conventions, units and assumptions of the code are explained in reference [[1]](#references). For simplicity, the MDQT code consists of a single C++ source file [PlasmaMDQTSimulation.cpp](/PlasmaMDQTSimulation.cpp). Prior to running a simulation, the user must appropriately set the input parameters, which are contained in a clearly-labeled section in the first 100 lines of the MDQT code, and then compile it into an executable. The code uses openMP to run on multicore computers, and, for simulations of large systems, requires significant computational resources. For best performance we suggest running several instances at the same time on a supercomputer.
 
 ## Installation
 
@@ -28,7 +28,7 @@ $ g++ -std=c++11 -o runFile -O3 PlasmaMDQTSimulation.cpp -lomp -lm -larmadillo
 $ ./runFile 1
 ```
 
-If you wish to know more in detail what git is and what you can do with it, the [github help page](https://help.github.com/articles/set-up-git) has all the references needed.
+If you wish to know more details about what git is and what you can do with it, the [github help page](https://help.github.com/articles/set-up-git) has all the references needed.
 
 The executable *runFile* accepts an integer 'job number' argument (1 in the above example), which provides a straightforward way for submitting multiple instances of the code at once. Each time the program is run with a different job number, the output files will be saved within a folder named **'jobX'**, where X is the integer provided as argument. The formats of input parameters and output files are detailed in the sections that follow.
 
@@ -41,7 +41,7 @@ To run the program, open ‘mainSimAnalysis.m’ in MATLAB and ensure that the f
 
 ## Input Parameters
 
-All input parameters are grouped into a clearly-labeled section within the first 100 lines of the MDQT code, are defined below.
+All input parameters are grouped into a clearly-labeled section within the first 100 lines of the MDQT code, and are defined below.
 
 -   __saveDirectory__ *(string)*: The folder in which simulation data will be saved, relative to the path of the executable file.
 
@@ -64,7 +64,7 @@ is the Wigner-Seitz radius. Typically, **Ge** &lt; 0.1 to avoid three-body recom
 -  __N0__ *(integer)*: Average number of particles within the simulation box. Note that the actual number of particles used within the simulation box is determined stochastically, and may differ slightly from **N0**. The actual particle number is contained within the variable *N* , which is saved at the end of the simulation
 (see Sec. [Output Files](#output-files)).
 
--  __detuning__ *(double)*: Detuning of the 408 nm cooling laser, in units of &gamma;, that drives the *<sup>2</sup>S<sub>1/2</sub> &rightarrow; <sup>2</sup>P<sub>3/2</sub>* transition
+-  __detuning__ *(double)*: Detuning of the 408 nm cooling laser, in units of &gamma;, that drives the *<sup>2</sup>S<sub>1/2</sub> &rightarrow; <sup>2</sup>P<sub>3/2</sub>* transition.
 _&gamma; = 1.41&times;10<sup>8</sup> s<sup>-1</sup>_ is the natural linewidth of the cooling transition.
 
 -  __detuningDP__ *(double)*: Detuning of the 1033 nm repump laser, in units of &gamma;, that drives the *<sup>2</sup>D<sub>5/2</sub> &rightarrow; <sup>2</sup>P<sub>3/2</sub>*  transition.
@@ -98,7 +98,7 @@ _&gamma; = 1.41&times;10<sup>8</sup> s<sup>-1</sup>_ is the natural linewidth of
 
 ## Output Files
 
-The MDQT code saves important information about the plasma as a function of time. After a certain number of MD steps, the code records global information about the plasma, including the average ion kinetic energy, average potential energy per particle, and ion state populations. At the end of a simulation, particle positions, velocities, and wavefunctions are saved (these are loaded when continuing a simulation). For convenience, we have provided a MATLAB program that can generate the
+The MDQT code saves important information about the plasma as a function of time. After a certain number of MD steps, the code records global information about the plasma, including the average ion kinetic energy, average potential energy per particle, and ion state populations. At the end of a simulation, particle positions, velocities, and wave functions are saved (these are loaded when continuing a simulation). For convenience, we have provided a MATLAB program that can generate the
 plots found in [[2]](#references), which will are discussed in [Analyzing the Output Files](#analyzing-the-output-files).
 
 Before discussing the different save files, it’s first important to understand how the folders are organized. The **saveDirectory** input parameter provides a relative path to where data for a given simulation will be stored. If the executable is located within directory *full/path/to/exec*, then all data will be stored within *full/path/to/exec/saveDirectory*. Within **saveDirectory**, a folder with name **GexxxDensityxx...Ionsxxxx** is saved. From now on, this will be referred to as the **simulation data folder**. Each simulation data folder contains a job folder for each instance of the program that is run. Recall from Sec. [Installation](#installation) that the job number is the integer input parameter that the executable reads in to distinguish multiple runs of the same executable.
@@ -109,7 +109,7 @@ A description of each file saved by the MDQT program is discussed below. Each fi
 Each file below is saved within each job folder:
 
 -   **energies.dat**: Tab-delimited file whose columns contain energy-related information about the plasma as a function of time. Each recorded quantity is averaged over all particles. Time, energy, and velocity are recorded with units _&omega;<sup>-1</sup><sub>pE</sub>_, _E<sub>c</sub> = e<sup>2</sup>/(4&pi;&epsilon;<sub>0</sub> a<sub>ws</sub>)_, and
-*a<sub>ws</sub> &omega;<sub>pE</sub>* respectively. The columns are organized as _[t KE<sub>x</sub> KE<sub>y</sub>, KE<sub>z</sub> PE PE(t) - PE(0) v<sub>exp,x</sub>]_, where **KE** denotes kinetic energy, **PE** denotes potential energy, and v<sub>exp,x</sub> denotes mean *x*-velocity.
+*a<sub>ws</sub> &omega;<sub>pE</sub>*, respectively. The columns are organized as _[t, KE<sub>x</sub>, KE<sub>y</sub>, KE<sub>z</sub>, PE , PE(t) - PE(0) v<sub>exp,x</sub>]_, where **KE** denotes kinetic energy, **PE** denotes potential energy, and v<sub>exp,x</sub> denotes mean *x*-velocity.
 
 -   **statePopulationsVsVTimexxxxxx.dat**: Tab-delimited file containing the state populations for each ion as a function of the *x*-velocity (*v<sub>x</sub>*). The columns are organized as follows:
 [v<sub>x</sub>, P<sub>v</sub>(v<sub>x</sub>), P<sub>p</sub>(v<sub>x</sub>), P<sub>d</sub>(v<sub>x</sub>)]. Each row corresponds to a different ion within the simulation. **xxxxxxx** is a 6-digit integer that corresponds to the row number of the **energies.dat** file, thus representing the time at which the state populations were recorded.
@@ -127,7 +127,7 @@ Each file below is saved within each job folder:
 
 ## Continuing a Simulation
 
-Due to the MDQT code being computationally expensive, you may run into a situation where the simulation will need to run longer than the time you’re allotted in a single session. For example, some clusters may only allow you to run a simulation for 8 hours at a time, but in order to reach the desired **tmax** it will take 10 hours. At the end of a simulation we record the ion positions, velocities, and wavefunctions. The code has the ability to continue a simulation by loading these previously-saved conditions.
+Due to the MDQT code being computationally expensive, you may run into a situation where the simulation will need to run longer than the time you’re allotted in a single session. For example, some clusters may only allow you to run a simulation for 8 hours at a time, but in order to reach the desired **tmax** it will take 10 hours. At the end of a simulation we record the ion positions, velocities, and wave functions. The code has the ability to continue a simulation by loading these previously-saved conditions.
 
 It’s important that the program finishes running without interruption because the last line of the code saves the particle conditions. If the program is terminated early, the particle conditions will not be saved and you will not be able to continue the simulation. How long the simulation takes depends on the system it’s run on, the number of particles, the density, and **tmax**. To obtain an estimate of how long the program will take to run, run a simulation with &sim; 3500 particles, **density** = 2, and tmax &lt; 1, which should take less than an hour.
 
