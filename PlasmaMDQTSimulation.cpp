@@ -1,13 +1,13 @@
 /****************************************************************************/
-/*    PLASMA  MDQT SIMULATION  -- v1.0 - October 6, 2019                    */
-/*	A combined molecular dynamics and quantum trajectories simulation		    */
-/*	of 1D laser cooling of ions in an ultracold neutral plasma that			    */
-/*	interact via screened Coulomb forces. The particles begin with			    */
-/*	randomized positions consistent with a uniform density distribution		  */
-/*	and zero velocity. Our treatment of 1D optical molasses includes the	  */
-/*	ions' interaction with the 408 nm laser cooling laser that addresses	  */
-/*	the S->P transition and the 1033 nm repump laser that addresses the		  */
-/*	2D_{5/2}->2P_{3/2) transition.											                    */
+/*       PLASMA  MDQT SIMULATION  -- v1.0 - October 6, 2019                 */
+/*  A combined molecular dynamics and quantum trajectories simulation       */
+/*  of 1D laser cooling of ions in an ultracold neutral plasma that	    */
+/*  interact via screened Coulomb forces. The particles begin with	    */
+/*  randomized positions consistent with a uniform density distribution     */
+/*  and zero velocity. Our treatment of 1D optical molasses includes the    */
+/*  ions' interaction with the 408 nm laser cooling laser that addresses    */
+/*  the S->P transition and the 1033 nm repump laser that addresses the     */
+/*  2D_{5/2}->2P_{3/2) transition.					    */
 /*                                                                          */
 /****************************************************************************/
 
@@ -23,8 +23,8 @@
 /***************************************************************************************/
 
 /*	References
-[1] G. M. Gorman, T. K. Langin, M. K. Warrens, T. C. Killian.
-		Combined moledular dynamics and quantum trajectories simulation of laser-driven copllisional systems
+[1] G. M. Gorman, T. K. Langin, M. K. Warrens, D. Vrinceanu and T. C. Killian.
+   Combined moledular dynamics and quantum trajectories simulation of laser-driven copllisional systems
 [2] T. K. Langin, Laser Cooling of Ions in a Neutral Plasma, Ph.D. thesis, Rice University (2018).
 */
 
@@ -49,26 +49,26 @@ using namespace arma;
 /********************************************************/
 
 // simulation ouutput files parameters
-char saveDirectory[256]{ "data/" };	// folder where simulation results will be saved relative to the executable
-constexpr bool newRun{ true };	//(true)	new simulation, (false)	continue simulation from previously-saved conditions
-constexpr int c0Cont = 00001;	// should match the 6-digit integer in 'ions_timestepXXXXXX.dat' if continuing a simulation
+char saveDirectory[256]{ "data/" }; // folder where simulation results will be saved relative to the executable
+constexpr bool newRun{ true };	//(true) new simulation, (false) continue simulation from previously-saved conditions
+constexpr int c0Cont = 00001;// should match the 6-digit integer in 'ions_timestepXXXXXX.dat' if continuing a simulation
 
 // plasma input parameters
-constexpr double	tmax{ 1.0 };	  // Maximum simulation time in in units omrga_pE^(-1)
+constexpr double	tmax{ 1.0 };	// Maximum simulation time in in units omrga_pE^(-1)
 constexpr double	density{ 2.0 };	// Plasma density in units 1e14 m^(-3)
-constexpr double	Ge{ .083 };			// Electron's Coulomb coupling parameter
-constexpr int		N0{ 100 };				// Average number of particles within simulation cell
-constexpr double	detuning{ -1.0 };	 // Detuning  of cooling laser (2S^(1/2) -> 2P^(3/2) transition) (in units of gamma)
-constexpr double	detuningDP{ 0.0 };	// Detuning of repump laser (2D^(5/2) -> 2P^(3/2) transition) (in units of gamma)
-constexpr double	Om{ 1.0 };				// Rabi freq (in units gamma=1.41e8 s^(-1)) of cooling laser
-constexpr double	OmDP{ 1.0 };			// Rabi freq (in units gamma=1.41e8 s^(-1)) of repump laser
+constexpr double	Ge{ .083 };	// Electron's Coulomb coupling parameter
+constexpr int		N0{ 100 };	// Average number of particles within simulation cell
+constexpr double	detuning{ -1.0 }; // Detuning of cooling laser (2S^(1/2) -> 2P^(3/2) transition) (in units of gamma)
+constexpr double	detuningDP{ 0.0 };// Detuning of repump laser (2D^(5/2) -> 2P^(3/2) transition) (in units of gamma)
+constexpr double	Om{ 1.0 };	  // Rabi freq (in units gamma=1.41e8 s^(-1)) of cooling laser
+constexpr double	OmDP{ 1.0 };	// Rabi freq (in units gamma=1.41e8 s^(-1)) of repump laser
 
 // functionality options
 constexpr bool		reNormalizewvFns{ false };	// renormalize wavefunctions or not
 constexpr bool		applyForce{ true };	 //(false) fort simulating collisionless plasma *
 /*
 For the case that applyForce=false, ion velocities are uniformly distributed between [-vRange and vRange] with units m/s.
-Ion velocities normally start at zero, and ions gain kinetic energy (e.g. velocity) via collisional redistribution of energy.
+Ion velocities start at zero, and ions gain kinetic energy (e.g. velocity) via collisiona lredistribution of energy.
 For a collisionless plasma, we need to supply initial velocities
 */
 constexpr double	vRange{ 15.0 };
@@ -78,13 +78,13 @@ constexpr double	fracOfSig{ 0.0 };		// >0 for saser cooling plasma #include <.h>
 
 // timestep options - note that the below parameters represent the maximum allowed timesteps
 const double		QUANTUMTIMESTEP{ .01 * .0058 * sqrt(density) };	// QT timestep
-constexpr double	DIHTIMESTEP{ .0002 };							// DIH timestep in units omega_pE^(-1). Should be less than TIMESTEP
-constexpr double	TIMESTEP{ 0.001 };								// MD timestep in units w_pE^(-1).  Should be greater than DIHTIMESTEP
-constexpr double	tmaxDIH{ 0.9 * 3.0 };							// DIH timestep is used from t = [0 tmaxDIH]
+constexpr double	DIHTIMESTEP{ .0002 };	// DIH timestep in units omega_pE^(-1). Should be less than TIMESTEP
+constexpr double	TIMESTEP{ 0.001 };	// MD timestep in units w_pE^(-1).  Should be greater than DIHTIMESTEP
+constexpr double	tmaxDIH{ 0.9 * 3.0 };	// DIH timestep is used from t = [0 tmaxDIH]
 /* Dimensionless rise time for DIH -> t_rise = 2*pi/(4*sqrt(3)) = 0.9 in units of w_pE^(-1)*/
 
 /********************************************************/
-/*			End of Input Parameters						*/
+/*			End of Input Parameters		*/
 /********************************************************/
 
 // other simulation parameters - these are self-consistently defined based on the input parameters above
@@ -101,11 +101,11 @@ const double L{ pow(N0 * 4. * M_PI / 3.,0.333333333) };	// length of simulation 
 
 // simulation variables
 double t{ 0.0 };			// actual time in units w_pE^(-1)
-int c0{ 0 };					// counts number of MD timesteps undergone in simulation
+int c0{ 0 };				// counts number of MD timesteps undergone in simulation
 unsigned counter{ 0 };	// time counter, used as output-file label
-unsigned N{};					// number of particles actually used in simulation (e.g. note difference between N0 and N)
-double Epot{};				// current total potential energy per particle in units e^2/(4*pi*eps0*a)
-double Epot0{};				// initial total potential energy per particle in units e^2/(4*pi*eps0*a)
+unsigned N{};		// number of particles actually used in simulation (e.g. note difference between N0 and N)
+double Epot{};		// current total potential energy per particle in units e^2/(4*pi*eps0*a)
+double Epot0{};		// initial total potential energy per particle in units e^2/(4*pi*eps0*a)
 
 // velocity distribution
 double PvelX[2001]{};			// velocities distributed into 2001 bins
@@ -169,13 +169,13 @@ void init(void);		// initializes  ion velocities to zero and ion at random posit
 void calcMD(double mdTIMESTEP);		// MD Verlet step progpagating positions and velocities
 void step_V(double MDTimestepRatio);	// gradually steps x-velocity due to MD over QT timescale
 void qstep(const double qtTimeStep);	// QT step propagates quantum state and x-velocity due to optical forces
-void writeConditions(int c0);			// saves a snapshot relevant data for restarting
-void readConditions(int c0);			// reads in data saved by 'writeConditions' when continuing a simulation
-void output(void);						// dump variables at regualar times dt = sampleFreq * mdTimeStep
+void writeConditions(int c0);		// saves a snapshot relevant data for restarting
+void readConditions(int c0);	// reads in data saved by 'writeConditions' when continuing a simulation
+void output(void);		// dump variables at regualar times dt = sampleFreq * mdTimeStep
 
 /***********************************************************************/
 /*                                                                     */
-/*		 Calculate inter-ion forces due to YOCP potential			   */
+/*		 Calculate inter-ion forces due to YOCP potential      */
 /*                                                                     */
 /***********************************************************************/
 
@@ -184,11 +184,11 @@ void forces(void)
 	// initialize variables
 	double rx{}, ry{}, rz{};		// position of ions on each axis in units of a
 	double dx{}, dy{}, dz{};		// distance between ions along each axis in units of a
-	double dr{};					// total distance between ions r=sqrt(dx^2+dy^2+dz^2) in units of a
+	double dr{};				// total distance between ions r=sqrt(dx^2+dy^2+dz^2) in units of a
 	double fx{}, fy{}, fz{};		// force between two ions along each axis with units e^2/(4*pi*eps0*m*a^2)
-	double ftotal{};				// fx = dx*ftotal
+	double ftotal{};			// fx = dx*ftotal
 	const double Rcut{ L / 2. };	// maximum distance an image charge can take under minimum image convention
-	int i{}, j{};					// particle indices for following loops
+	int i{}, j{};				// particle indices for following loops
 
 	// initialize inter-ion forces for all ions to zero prior to parallel loop calculation
 	for(i = 0; i<N; i++)
@@ -252,9 +252,9 @@ void Epotential(void)
 	// initialize variables
 	double rx{}, ry{}, rz{};		// position of ions on each axis in units of a
 	double dx{}, dy{}, dz{};		// distance between ions along each axis in units of a
-	double dr{};					// total distance between ions r=sqrt(dx^2+dy^2+dz^2) in units of a
+	double dr{};				// total distance between ions r=sqrt(dx^2+dy^2+dz^2) in units of a
 	const double Rcut{ L / 2. };	// maximum distance an image charge can take under minimum image convention
-	int i{}, j{};					// particle indices for following loops
+	int i{}, j{};				// particle indices for following loops
 
 	// sum potential energies between all particles
 	Epot = 0.;
@@ -1197,9 +1197,9 @@ int main(int argc, char **argv)
 		{	// Use DIH timestep as MD timestep
 			if (DIHTIMESTEP < QUANTUMTIMESTEP)
 			{	// Quantum timestep must be smallest, so it is set equal to DIH timestep
-				mdTimeStep = DIHTIMESTEP;						// DIH timestep is smallest, so it remains unchanged
-				qtTimeStep = mdTimeStep;						// QT timestep must be smallest, so it is set equal to mdTimeStep
-				plasmaToQuantumTimestepRatio = 1;				// Timesteps are equal, so ratio is set to 1
+				mdTimeStep = DIHTIMESTEP; // DIH timestep is smallest, so it remains unchanged
+				qtTimeStep = mdTimeStep; // QT timestep must be smallest, so it is set equal to mdTimeStep
+				plasmaToQuantumTimestepRatio = 1; // Timesteps are equal, so ratio is set to 1
 			}
 			else
 			{	// Quantum timestep is smallest, so now ensure MD and QT timesteps have integer ratio
