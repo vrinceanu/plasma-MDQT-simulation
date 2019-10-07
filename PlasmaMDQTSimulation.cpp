@@ -57,7 +57,7 @@ constexpr int c0Cont = 00001;	// should match the 6-digit integer in 'ions_times
 constexpr double	tmax{ 1.0 };	  // Maximum simulation time in in units omrga_pE^(-1)
 constexpr double	density{ 2.0 };	// Plasma density in units 1e14 m^(-3)
 constexpr double	Ge{ .083 };			// Electron's Coulomb coupling parameter
-constexpr int		N0{ 500 };				// Average number of particles within simulation cell
+constexpr int		N0{ 100 };				// Average number of particles within simulation cell
 constexpr double	detuning{ -1.0 };	 // Detuning  of cooling laser (2S^(1/2) -> 2P^(3/2) transition) (in units of gamma)
 constexpr double	detuningDP{ 0.0 };	// Detuning of repump laser (2D^(5/2) -> 2P^(3/2) transition) (in units of gamma)
 constexpr double	Om{ 1.0 };				// Rabi freq (in units gamma=1.41e8 s^(-1)) of cooling laser
