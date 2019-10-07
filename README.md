@@ -6,7 +6,7 @@ The MD portion of the code starts with a uniform spatial distribution of ions at
 for the *<sup>2</sup>S<sub>1/2</sub> &rightarrow; <sup>2</sup>P<sub>3/2</sub>* transition and a re-pump laser
 for the *<sup>2</sup>D<sub>5/2</sub> &rightarrow; <sup>2</sup>P<sub>3/2</sub>* transition.
 
-The conventions, units and assumptions of the code are explained in reference [[1]](#references). For simplicity, the MDQT code consist of a single C++ source file [PlasmaMDQTSimulation.cpp](/PlasmaMDQTSimulation.cpp). Prior to running a simulation, the user must appropriately set the input parameters, which are contained in a clearly-labeled section in the first 100 lines of the MDQT code, and then compile it into an executable. The code is runs on multicore computers by using openMP, and, for simulations of large systems, requires significant computational resources. For best performance we suggest running it on a supercomputer.
+The conventions, units and assumptions of the code are explained in reference [[1]](#references). For simplicity, the MDQT code consist of a single C++ source file [PlasmaMDQTSimulation.cpp](/PlasmaMDQTSimulation.cpp). Prior to running a simulation, the user must appropriately set the input parameters, which are contained in a clearly-labeled section in the first 100 lines of the MDQT code, and then compile it into an executable. The code uses openMP to run on multicore computers, and, for simulations of large systems, requires significant computational resources. For best performance we suggest running several instances at the same time on a supercomputer.
 
 ## Installation
 
