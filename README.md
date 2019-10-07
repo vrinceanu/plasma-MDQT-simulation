@@ -2,30 +2,29 @@
 
 A code combining molecular dynamics (MD) and quantum trajectories (QT) to simulate the interaction of ions in ultracold neutral plasmas with cooling lasers.
 
-The MD portion of the code evolves each ion’s position and velocity due to inter-ion forces derived from a Yukawa one-component plasma model. The QT portion of the code evolves the ion wavefunctions and velocities along the cooling axis according to the ion-light Hamiltonian, which includes the effects from a cooling laser
-for the *<sup>2</sup>S<sub>1/2</sub> &rightarrow; <sup>2</sup>P<sub>3/2</sub>* transition and a repump laser
+The MD portion of the code starts with a uniform spatial distribution of ions at rest and evolves each ion’s position and velocity due to inter-ion forces derived from a Yukawa one-component plasma model. The QT portion of the code evolves the ion wave functions and velocities along the cooling axis according to the ion-light Hamiltonian, which includes the effects from a cooling laser
+for the *<sup>2</sup>S<sub>1/2</sub> &rightarrow; <sup>2</sup>P<sub>3/2</sub>* transition and a re-pump laser
 for the *<sup>2</sup>D<sub>5/2</sub> &rightarrow; <sup>2</sup>P<sub>3/2</sub>* transition.
 
-The conventions, units and assumptions of the code are explained in reference [[1]](#references). For simplicity, the MDQT code consist of a single C++ source file (*PlasmaMDQTSimulation.cpp*). Prior to running a simulation, the user must appropriately set the input parameters, which are contained in a clearly-labeled section in the first 100 lines of the MDQT code, and then the code must be compiled into an executable. The code is parallelized using MPI, and for simulations of large systems requires significant computational resources. For best performance we suggest running it on a supercomputer.
+The conventions, units and assumptions of the code are explained in reference [[1]](#references). For simplicity, the MDQT code consist of a single C++ source file [PlasmaMDQTSimulation.cpp](/PlasmaMDQTSimulation.cpp). Prior to running a simulation, the user must appropriately set the input parameters, which are contained in a clearly-labeled section in the first 100 lines of the MDQT code, and then compile it into an executable. The code is runs on multicore computers by using openMP, and, for simulations of large systems, requires significant computational resources. For best performance we suggest running it on a supercomputer.
 
 ## Installation
 
 This simulation code requires:
 - a modern C++ compiler, such as the GNU compiler g++, please refer to [GCC, the GNU Compiler Collection](http://gcc.org) for installation and usage;
-- loops parallelized with standard MPI to speed up expensive calculation (e.g. force calculations). We recommend the widely available [Open MPI software](https://www.open-mpi.org);
+- openMP parallelization, which is either build-in the compiler (Linux), or available as an external library (Mac Os);
 - the [Armadillo C++ library](http://arma.sourceforge.net) for linear algebra and scientific computing.
-
 
 After installing and checking the availability of the above prerequisites, you can download, clone and compile the source from GitHub:
 
 ```
 $ git clone https://github.com/vrinceanu/plasma_mdqt_simulation.git
 $ cd plasma-MDQT-simulation
-# on Linux
+# compilation on Linux
 $ g++ -std=c++11 -fopenmp -o runFile -O3 PlasmaMDQTSimulation.cpp -lm -armadillo
-# on Mac OS
+# compilation on Mac OS
 $ g++ -std=c++11 -o runFile -O3 PlasmaMDQTSimulation.cpp -lomp -lm -larmadillo
-# run one instance
+# run one instance of the simulation
 $ ./runFile 1
 ```
 
@@ -62,7 +61,7 @@ _Ge = e<sup>2</sup>/(4&pi;&epsilon;<sub>0</sub> k<sub>B</sub> T<sub>e</sub>)_, w
 _a<sub>ws</sub> = (3/4&pi; n)<sup>&frac13;</sup>_
 is the Wigner-Seitz radius. Typically, **Ge** &lt; 0.1 to avoid three-body recombination.
 
--  __N0__ *(integer)*: Average number of particles within the simulation box. Note that the actual number of particles used within the simulation box is determined stochastically, and may differ slightly from **N0**. The actual particle number is contained within the variable _N_, which is saved at the end of the simulation
+-  __N0__ *(integer)*: Average number of particles within the simulation box. Note that the actual number of particles used within the simulation box is determined stochastically, and may differ slightly from **N0**. The actual particle number is contained within the variable *N* , which is saved at the end of the simulation
 (see Sec. [Output Files](#output-files)).
 
 -  __detuning__ *(double)*: Detuning of the 408 nm cooling laser, in units of &gamma;, that drives the *<sup>2</sup>S<sub>1/2</sub> &rightarrow; <sup>2</sup>P<sub>3/2</sub>* transition
