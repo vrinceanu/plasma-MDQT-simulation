@@ -12,7 +12,7 @@ The conventions, units and assumptions of the code are explained in reference [[
 
 This simulation code requires:
 - a modern C++ compiler, such as the GNU compiler g++, please refer to [GCC, the GNU Compiler Collection](http://gcc.org) for installation and usage;
-- openMP parallelization, which is either build-in the compiler (Linux), or available as an external library (Mac Os);
+- openMP parallelization, which is either build-in the compiler (Linux), or available as an external library (Mac OS);
 - the [Armadillo C++ library](http://arma.sourceforge.net) for linear algebra and scientific computing.
 
 After installing and checking the availability of the above prerequisites, you can download, clone and compile the source from GitHub:
