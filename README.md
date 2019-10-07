@@ -137,6 +137,6 @@ Once the input parameters have been changed appropriately, save and recompile th
 
 
 ## References
-[1] G.M. Gorman, T.K. Langin, M. K. Warrens, and T. C. Killian, *Combined molecular dynamics and quantum trajectories simulation of laser-driven collisional systems*, _submitted for publication to Physical Review A_.
+[1] G.M. Gorman, T.K. Langin, M. K. Warrens, D. Vrinceanu and T. C. Killian, *Combined molecular dynamics and quantum trajectories simulation of laser-driven collisional systems*, _submitted for publication to Physical Review A_.
 
 [2] T. K. Langin, *Laser Cooling of Ions in Neutral Plasma*, Ph.D. Thesis, Rice University (2019).
