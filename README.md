@@ -34,7 +34,7 @@ The executable *runFile* accepts an integer 'job number' argument (1 in the abov
 
 ## Analyzing the Output Files
 
-The analysis of MDQT results is facilitated by the MATLAB analysis scripts collected in the **Plasma-MDQT-Analysis** folder. These scripts can be used to reproduce simuation data found within [[1]](#references).
+The analysis of MDQT results is facilitated by the MATLAB analysis scripts collected in the [Plasma-MDQT-Analysis](/Plasma-MDQT-Analysis) folder. These scripts can be used to reproduce simuation data found within [[1]](#references).
 
 To run the program, open ‘mainSimAnalysis.m’ in MATLAB and ensure that the folder containing the scipts is added to the MATLAB search path, which may be done by modifying the ‘addpath’ command on line 7. Once that’s done, press ‘Run’ and the program will allow the user to select one or more simulation folders via a dialogue box. MATLAB will then prompt the user to select which program options to use via the command window.
 
