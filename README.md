@@ -18,7 +18,7 @@ This simulation code requires:
 After installing and checking the availability of the above prerequisites, you can download, clone and compile the source from GitHub:
 
 ```
-$ git clone https://github.com/vrinceanu/plasma_mdqt_simulation.git
+$ git clone https://github.com/vrinceanu/plasma-MDQT-simulation.git
 $ cd plasma-MDQT-simulation
 # compilation on Linux
 $ g++ -std=c++11 -fopenmp -o runFile -O3 PlasmaMDQTSimulation.cpp -lm -armadillo
