@@ -1,5 +1,7 @@
 # Plasma MDQT Simulation
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3477606.svg)](https://doi.org/10.5281/zenodo.3477606)
+
 A code combining molecular dynamics (MD) and quantum trajectories (QT) to simulate the interaction of ions in ultracold neutral plasmas with cooling lasers.
 
 The MD portion of the code starts with a uniform spatial distribution of ions at rest and evolves each ion’s position and velocity due to inter-ion forces derived from a Yukawa one-component plasma model. The QT portion of the code evolves the ion wave functions and velocities along the cooling axis according to the ion-light Hamiltonian, which includes the effects from a cooling laser
