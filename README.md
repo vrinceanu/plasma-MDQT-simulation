@@ -135,7 +135,7 @@ It’s important that the program finishes running without interruption because 
 
 Assuming you have successfully completed a simulation, you may continue the simulation from the previously-saved conditions in the following way. First, except for **newRun**, **c0Cont**, and **tmax**, all the input parameters must be the same as they were for the original simulation. Then, set **newRun** = *false* and set **c0Cont** equal to the 6-digit integer found within the most recent **conditions_timestepxxxxxx.dat** file. Finally, remember that **tmax** is not the duration of the simulation, but it is the time at which the simulation ends. You must change **tmax** to be greater than it was in the previous simulation, otherwise the continued simulation will end immediately.
 
-Once the input parameters have been changed appropriately, save and recompile the C++ pro- gram following the instructions from Sec. [Installation](#installation). Make sure that the new executable file is contained within the same directory as the original executable file because the save directory is relative to the its location.
+Once the input parameters have been changed appropriately, save and recompile the C++ program following the instructions from Sec. [Installation](#installation). Make sure that the new executable file is contained within the same directory as the original executable file because the save directory is relative to this location.
 
 
 ## References
